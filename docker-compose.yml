@@ -1,0 +1,37 @@
+version: '3'
+services:
+  db:
+    container_name: merchants-db
+    image: postgres:12-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: postgres
+
+  app:
+    container_name: merchants-app
+    build:
+      context: .
+    environment:
+      RAILS_ENV: development
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+
+  test:
+    container_name: merchants-test
+    build:
+      context: .
+    environment:
+      RAILS_ENV: test
+    command: bundle exec spring server
+    volumes:
+      - .:/app
+    depends_on:
+      - db
