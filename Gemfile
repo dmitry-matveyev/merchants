@@ -21,6 +21,7 @@ gem 'jbuilder', '~> 2.7'
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+gem "slim-rails"
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
@@ -30,6 +31,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 group :development, :test do
   gem 'rspec-rails', '~> 4.0.0'
+  gem "factory_bot_rails"
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 

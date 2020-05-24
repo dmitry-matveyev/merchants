@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @merchant.name
+p
+  strong Description:
+  = @merchant.description
+p
+  strong Email:
+  = @merchant.email
+p
+  strong Status:
+  = @merchant.status
+p
+  strong Total transaction sum:
+  = @merchant.total_transaction_sum
+
+=> link_to 'Edit', edit_merchant_path(@merchant)
+'|
+=< link_to 'Back', merchants_path
