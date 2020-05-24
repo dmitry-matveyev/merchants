@@ -16,7 +16,7 @@ module Api
       private
 
       def permit_params
-        params.permit(:amount, :type)
+        params.permit(:amount, :type, :transaction_id)
       end
 
       def set_merchant

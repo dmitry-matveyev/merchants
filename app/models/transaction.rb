@@ -10,6 +10,8 @@ class Transaction < ApplicationRecord
     scope scope_name, -> { where(type: Transaction.const_get(scope_name.to_s.capitalize).name) }
   end
 
+  # Here is basic data validations which should match db internal validations
+  # that's the reason they are here in model
   validates :merchant, presence: true
   validates :uuid,  presence: true
   validates :type, presence: true
