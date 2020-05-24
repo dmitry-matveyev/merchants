@@ -6,7 +6,9 @@ class Transaction < ApplicationRecord
   # TODO: make status values more verbose
   enum status: {approved: 0, reversed: 1, refunded: 2, error: 4}
 
-  scope :authorized, -> { where(type: Transaction::Authorized.to_s) }
+  %i[authorized charged].each do |scope_name|
+    scope scope_name, -> { where(type: Transaction.const_get(scope_name.to_s.capitalize).name) }
+  end
 
   validates :merchant, presence: true
   validates :uuid,  presence: true

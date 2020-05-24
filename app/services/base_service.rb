@@ -14,4 +14,12 @@ class BaseService
   def initialize(_params)
     raise NotImplementedError
   end
+
+  def invalid_result(errors)
+    OpenStruct.new(errors: errors, success?: false)
+  end
+
+  def valid_result(response)
+    OpenStruct.new(response.merge(success?: true))
+  end
 end

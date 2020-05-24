@@ -1,9 +1,14 @@
 FactoryBot.define do
   factory :transaction do
-    uuid { "" }
+    merchant
+    uuid { SecureRandom.uuid }
     amount { "9.99" }
-    status { 1 }
+    status { Transaction.statuses[:approved] }
     customer_email { "MyString" }
     customer_phone { "MyString" }
+
+    trait :authorized do
+      type { Transaction::Authorized.name }
+    end
   end
 end

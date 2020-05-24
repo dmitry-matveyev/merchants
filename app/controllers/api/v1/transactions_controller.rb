@@ -6,13 +6,17 @@ module Api
       def create
         result = Transaction::CreateService.call(permit_params.merge(merchant: @merchant))
 
-        render json: { uuid: result }
+        response_params = if result.success?
+          render json: { uuid: result.uuid }
+        else
+          render json: { errors: result.errors }, status: 422
+        end
       end
 
       private
 
       def permit_params
-        params.permit(:amount)
+        params.permit(:amount, :type)
       end
 
       def set_merchant
