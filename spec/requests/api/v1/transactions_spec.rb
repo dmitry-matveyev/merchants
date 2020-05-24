@@ -18,6 +18,18 @@ RSpec.describe "transactions api", type: :request do
         it { is_expected.to eq(200) }
         it { expect(body).to eq('uuid' => last_uuid) }
       end
+
+      context 'when merchant is not authenticated' do
+        let(:merchant_id) { nil }
+
+        it { is_expected.to eq(403) }
+      end
+
+      context 'when merchant is not active' do
+        let(:merchant_id) { create(:merchant, :inactive).id }
+
+        it { is_expected.to eq(401) }
+      end
     end
   end
 end

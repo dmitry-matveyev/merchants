@@ -3,6 +3,7 @@ class Transaction < ApplicationRecord
   # assuming there are no callbacks needed
   belongs_to :merchant, inverse_of: :transactions
 
+  # TODO: make status values more verbose
   enum status: {approved: 0, reversed: 1, refunded: 2, error: 4}
 
   scope :authorized, -> { where(type: Transaction::Authorized.to_s) }

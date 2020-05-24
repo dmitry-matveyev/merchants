@@ -5,5 +5,9 @@ FactoryBot.define do
     email { "MyString" }
     status { Merchant.statuses[:active] }
     total_transaction_sum { "9.99" }
+
+    trait :inactive do
+      status { Merchant.statuses[:inactive] }
+    end
   end
 end

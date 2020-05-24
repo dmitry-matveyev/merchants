@@ -17,7 +17,10 @@ module Api
 
       def set_merchant
         # TODO: must be unique token
-        @merchant = Merchant.find_by!(id: request.headers[:merchant_id])
+        @merchant = Merchant.find_by(id: request.headers[:merchant_id])
+        return head 403 unless @merchant
+
+        head 401 unless @merchant.active?
       end
     end
   end
