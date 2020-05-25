@@ -3,8 +3,8 @@ class Transaction < ApplicationRecord
     # Do not pass user params directly into send method
     # even if it is validated
     # to decouple param name from method name
-    SCOPES = {authorize: :authorized, charge: :charged}.with_indifferent_access
-    VALIDATORS = %i[charged]
+    SCOPES = {authorize: :authorized, charge: :charged, refund: :refunded}.with_indifferent_access
+    VALIDATORS = %i[charged refunded]
 
     def call
       # TODO: we can use ActiveModel::Validations or Dry::Monads
@@ -17,14 +17,7 @@ class Transaction < ApplicationRecord
       )
       return invalid_result(result.errors) unless result.success?
 
-      resource = scope.new(
-        amount: amount,
-        uuid: generate_uuid,
-      )
-
-      return valid_result(uuid: resource.uuid) if resource.save
-
-      invalid_result(resource.errors)
+      save_service_class.call(scope: scope, amount: amount, parent_id: transaction_id)
     end
 
     private
@@ -36,10 +29,6 @@ class Transaction < ApplicationRecord
       self.transaction_id = params[:transaction_id]
     end
 
-    def generate_uuid
-      SecureRandom.uuid
-    end
-
     def scope
       merchant.transactions.approved.public_send(type)
     end
@@ -48,6 +37,16 @@ class Transaction < ApplicationRecord
       scope_name = type.in?(VALIDATORS) ? type : nil
       class_name = :"#{scope_name.to_s.capitalize}Validator"
       Transaction.const_get(class_name)
+    end
+
+    def save_service_class
+      service_name = 'SaveService'
+      transaction_class = Transaction.const_get(type.to_s.classify)
+      if transaction_class.const_defined?(service_name)
+        transaction_class.const_get(service_name)
+      else
+        service_name.constantize
+      end
     end
 
     attr_accessor :merchant, :amount, :type, :transaction_id

@@ -111,6 +111,39 @@ RSpec.describe "transactions api", type: :request do
     end
   end
 
+  describe 'refund' do
+    let(:params) { {type: 'refund', amount: 100.99} }
+
+    include_examples 'authentication and authorization'
+
+    context 'when merchant is authenticated' do
+      context 'when customer has corresponding charge transaction' do
+        let(:merchant) { create(:merchant) }
+        let(:merchant_id) { merchant.id }
+        let(:charged_transaction) { create(:transaction, :charged, merchant: merchant, amount: 100.99) }
+
+        let(:params) { {type: 'refund', amount: 100.99, transaction_id: charged_transaction.id} }
+
+        it { is_expected.to eq(200) }
+        it { expect(body).to eq('uuid' => last_uuid) }
+        it { expect { subject }.to change { merchant.transactions.refunded.count }.by(1) }
+        it { expect { subject }.to change { charged_transaction.reload.status }.to('reversed') }
+      end
+
+      context 'when customer has no charged transaction' do
+        let(:merchant) { create(:merchant) }
+        let(:merchant_id) { merchant.id }
+
+        it { is_expected.to eq(422) }
+        it { expect(body).to eq('errors' => {'transaction_id' => 'invalid'}) }
+        it { expect { subject }.not_to change { Transaction.refunded.count } }
+      end
+
+      context 'when charged transaction has invalid status'
+      context 'when charged transaction exists for another merchant'
+    end
+  end
+
   describe 'invalid transaction type' do
     let(:params) { {type: SecureRandom.hex, amount: 0.99} }
 

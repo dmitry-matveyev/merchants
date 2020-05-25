@@ -4,14 +4,14 @@ class Transaction < ApplicationRecord
         result = super
         return result unless result.success?
 
-        return invalid_result(transaction_id: 'invalid') unless charge_transaction_exists?
+        return invalid_result(transaction_id: 'invalid') unless authorized_transaction_exists?
 
         valid_result({})
       end
 
       private
 
-      def charge_transaction_exists?
+      def authorized_transaction_exists?
         merchant = params[:merchant]
         amount = params[:amount]
         transaction_id = params[:transaction_id] 

@@ -10,5 +10,9 @@ FactoryBot.define do
     trait :authorized do
       type { Transaction::Authorized.name }
     end
+
+    trait :charged do
+      type { Transaction::Charged.name }
+    end
   end
 end
