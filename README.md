@@ -1,4 +1,4 @@
-**Task description:
+*Task description:
 
 Merchants have many payment transactions of different types.
 
@@ -14,7 +14,7 @@ Transaction Types
 
 Goal is to propose an API to create transactions.
 
-**Solution
+*Solution
 
 API:
 
@@ -26,7 +26,7 @@ PARAMS:
 * :type # one of (authorized charged refunded)
 * :transaction_id # for charged and refunded transaction types 
 
-**How to run:
+*How to run:
 
 * run app: `docker-compose up app`
 * run tests: `docker-compose run test rspec`
