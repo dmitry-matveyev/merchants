@@ -3,14 +3,14 @@
 Merchants have many payment transactions of different types.
 
 Transaction Types:
-1 Authorize transaction - has amount and used to hold customer's amount
-2 Charge transaction - has amount and used to confirm the amount is taken from the customer's account and transferred to the merchant
-2.1 The merchant's total transactions amount has to be the sum of the approved Charge transactions
-3 Refund transaction - has amount and used to reverse a specific amount (whole amount) of the Charge Transaction and return it to the customer
-3.1 Transitions the Charge transaction to status refunded
-3.2 The approved Refund transactions will decrease the merchant's total transaction amount
-4 Reversal transaction - has no amount, used to invalidate the Authorize Transaction
-4.1 Transitions the Authorize transaction to status reversed
+1. Authorize transaction - has amount and used to hold customer's amount
+2. Charge transaction - has amount and used to confirm the amount is taken from the customer's account and transferred to the merchant
+* The merchant's total transactions amount has to be the sum of the approved Charge transactions
+3. Refund transaction - has amount and used to reverse a specific amount (whole amount) of the Charge Transaction and return it to the customer
+* Transitions the Charge transaction to status refunded
+* The approved Refund transactions will decrease the merchant's total transaction amount
+4. Reversal transaction - has no amount, used to invalidate the Authorize Transaction
+* Transitions the Authorize transaction to status reversed
 
 Goal is to propose an API to create transactions.
 
